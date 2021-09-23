@@ -20,7 +20,8 @@
  * directives. This is a common mistake.
  */
 #define LED_GREEN   PB5 // AVR pin where green LED is connected
-#define SHORT_DELAY 10 // Delay in milliseconds
+#define DOT_DELAY 300 // Delay in milliseconds
+#define COMMA_DELAY 100 // Delay in milliseconds
 #ifndef F_CPU           // Preprocessor directive allows for conditional
                         // compilation. The #ifndef means "if not defined".
 # define F_CPU 16000000 // CPU frequency in Hz required for delay
@@ -47,19 +48,64 @@ int main(void)
 
     // Set pin LOW in Data Register (LED off)
     // PORTB = PORTB and 1101 1111
-    PORTB = PORTB & ~(1<<LED_GREEN);
-
+    PORTB = PORTB & ~(1<<LED_GREEN); 
+    
     // Infinite loop
     while (1)
     {
-        // Pause several milliseconds
-        _delay_ms(SHORT_DELAY);
-
-        // Invert LED in Data Register
-        // PORTB = PORTB xor 0010 0000
-        PORTB = PORTB ^ (1<<LED_GREEN);
+        Make_D_Morse();
+        
+        Make_E_Morse();
+        
+        Make_2_Morse();
     }
-
+    
+    
     // Will never reach this
     return 0;
-}    
+}
+
+void Make_D_Morse()
+{
+    _delay_ms(DOT_DELAY);
+
+    PORTB = PORTB ^ (1<<LED_GREEN);
+    
+    _delay_ms(DOT_DELAY);
+
+    PORTB = PORTB ^ (1<<LED_GREEN);
+    
+    _delay_ms(DOT_DELAY);
+
+    PORTB = PORTB ^ (1<<LED_GREEN);
+} 
+
+void Make_E_Morse()
+{
+    _delay_ms(DOT_DELAY);
+
+    PORTB = PORTB ^ (1<<LED_GREEN);
+}
+
+void Make_2_Morse()
+{
+    _delay_ms(DOT_DELAY);
+
+    PORTB = PORTB ^ (1<<LED_GREEN);
+    
+    _delay_ms(DOT_DELAY);
+
+    PORTB = PORTB ^ (1<<LED_GREEN);
+    
+    _delay_ms(COMMA_DELAY);
+
+    PORTB = PORTB ^ (1<<LED_GREEN);
+    
+    _delay_ms(COMMA_DELAY);
+
+    PORTB = PORTB ^ (1<<LED_GREEN);
+    
+    _delay_ms(COMMA_DELAY);
+
+    PORTB = PORTB ^ (1<<LED_GREEN);
+}

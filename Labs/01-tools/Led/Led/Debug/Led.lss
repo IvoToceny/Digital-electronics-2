@@ -3,29 +3,29 @@ Led.elf:     file format elf32-avr
 
 Sections:
 Idx Name          Size      VMA       LMA       File off  Algn
-  0 .data         00000000  00800100  00800100  000000f2  2**0
+  0 .data         00000000  00800100  00800100  000001ce  2**0
                   CONTENTS, ALLOC, LOAD, DATA
-  1 .text         0000009e  00000000  00000000  00000054  2**1
+  1 .text         0000017a  00000000  00000000  00000054  2**1
                   CONTENTS, ALLOC, LOAD, READONLY, CODE
-  2 .comment      00000030  00000000  00000000  000000f2  2**0
+  2 .comment      00000030  00000000  00000000  000001ce  2**0
                   CONTENTS, READONLY
-  3 .note.gnu.avr.deviceinfo 00000040  00000000  00000000  00000124  2**2
+  3 .note.gnu.avr.deviceinfo 00000040  00000000  00000000  00000200  2**2
                   CONTENTS, READONLY
-  4 .debug_aranges 00000020  00000000  00000000  00000164  2**0
+  4 .debug_aranges 00000038  00000000  00000000  00000240  2**0
                   CONTENTS, READONLY, DEBUGGING
-  5 .debug_info   000006fd  00000000  00000000  00000184  2**0
+  5 .debug_info   00000969  00000000  00000000  00000278  2**0
                   CONTENTS, READONLY, DEBUGGING
-  6 .debug_abbrev 0000065e  00000000  00000000  00000881  2**0
+  6 .debug_abbrev 000006aa  00000000  00000000  00000be1  2**0
                   CONTENTS, READONLY, DEBUGGING
-  7 .debug_line   00000242  00000000  00000000  00000edf  2**0
+  7 .debug_line   00000315  00000000  00000000  0000128b  2**0
                   CONTENTS, READONLY, DEBUGGING
-  8 .debug_frame  00000024  00000000  00000000  00001124  2**2
+  8 .debug_frame  00000054  00000000  00000000  000015a0  2**2
                   CONTENTS, READONLY, DEBUGGING
-  9 .debug_str    00000392  00000000  00000000  00001148  2**0
+  9 .debug_str    000003b9  00000000  00000000  000015f4  2**0
                   CONTENTS, READONLY, DEBUGGING
- 10 .debug_loc    00000048  00000000  00000000  000014da  2**0
+ 10 .debug_loc    00000288  00000000  00000000  000019ad  2**0
                   CONTENTS, READONLY, DEBUGGING
- 11 .debug_ranges 00000010  00000000  00000000  00001522  2**0
+ 11 .debug_ranges 00000028  00000000  00000000  00001c35  2**0
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
@@ -65,51 +65,209 @@ Disassembly of section .text:
   6e:	d8 e0       	ldi	r29, 0x08	; 8
   70:	de bf       	out	0x3e, r29	; 62
   72:	cd bf       	out	0x3d, r28	; 61
-  74:	0e 94 40 00 	call	0x80	; 0x80 <main>
-  78:	0c 94 4d 00 	jmp	0x9a	; 0x9a <_exit>
+  74:	0e 94 b2 00 	call	0x164	; 0x164 <main>
+  78:	0c 94 bb 00 	jmp	0x176	; 0x176 <_exit>
 
 0000007c <__bad_interrupt>:
   7c:	0c 94 00 00 	jmp	0	; 0x0 <__vectors>
 
-00000080 <main>:
- **********************************************************************/
-int main(void)
-{
-    // Set pin as output in Data Direction Register
-    // DDRB = DDRB or 0010 0000
-    DDRB = DDRB | (1<<LED_GREEN);
-  80:	25 9a       	sbi	0x04, 5	; 4
-
-    // Set pin LOW in Data Register (LED off)
-    // PORTB = PORTB and 1101 1111
-    PORTB = PORTB & ~(1<<LED_GREEN);
-  82:	2d 98       	cbi	0x05, 5	; 5
-        // Pause several milliseconds
-        _delay_ms(SHORT_DELAY);
-
-        // Invert LED in Data Register
-        // PORTB = PORTB xor 0010 0000
-        PORTB = PORTB ^ (1<<LED_GREEN);
-  84:	90 e2       	ldi	r25, 0x20	; 32
+00000080 <Make_D_Morse>:
 	#else
 		//round up by default
 		__ticks_dc = (uint32_t)(ceil(fabs(__tmp)));
 	#endif
 
 	__builtin_avr_delay_cycles(__ticks_dc);
-  86:	ef e3       	ldi	r30, 0x3F	; 63
-  88:	fc e9       	ldi	r31, 0x9C	; 156
-  8a:	31 97       	sbiw	r30, 0x01	; 1
-  8c:	f1 f7       	brne	.-4      	; 0x8a <main+0xa>
-  8e:	00 c0       	rjmp	.+0      	; 0x90 <main+0x10>
+  80:	2f ef       	ldi	r18, 0xFF	; 255
+  82:	35 ea       	ldi	r19, 0xA5	; 165
+  84:	8e e0       	ldi	r24, 0x0E	; 14
+  86:	21 50       	subi	r18, 0x01	; 1
+  88:	30 40       	sbci	r19, 0x00	; 0
+  8a:	80 40       	sbci	r24, 0x00	; 0
+  8c:	e1 f7       	brne	.-8      	; 0x86 <Make_D_Morse+0x6>
+  8e:	00 c0       	rjmp	.+0      	; 0x90 <Make_D_Morse+0x10>
   90:	00 00       	nop
-  92:	85 b1       	in	r24, 0x05	; 5
-  94:	89 27       	eor	r24, r25
-  96:	85 b9       	out	0x05, r24	; 5
-  98:	f6 cf       	rjmp	.-20     	; 0x86 <main+0x6>
 
-0000009a <_exit>:
-  9a:	f8 94       	cli
+void Make_D_Morse()
+{
+    _delay_ms(DOT_DELAY);
 
-0000009c <__stop_program>:
-  9c:	ff cf       	rjmp	.-2      	; 0x9c <__stop_program>
+    PORTB = PORTB ^ (1<<LED_GREEN);
+  92:	95 b1       	in	r25, 0x05	; 5
+  94:	80 e2       	ldi	r24, 0x20	; 32
+  96:	98 27       	eor	r25, r24
+  98:	95 b9       	out	0x05, r25	; 5
+  9a:	9f ef       	ldi	r25, 0xFF	; 255
+  9c:	25 ea       	ldi	r18, 0xA5	; 165
+  9e:	3e e0       	ldi	r19, 0x0E	; 14
+  a0:	91 50       	subi	r25, 0x01	; 1
+  a2:	20 40       	sbci	r18, 0x00	; 0
+  a4:	30 40       	sbci	r19, 0x00	; 0
+  a6:	e1 f7       	brne	.-8      	; 0xa0 <Make_D_Morse+0x20>
+  a8:	00 c0       	rjmp	.+0      	; 0xaa <Make_D_Morse+0x2a>
+  aa:	00 00       	nop
+    
+    _delay_ms(DOT_DELAY);
+
+    PORTB = PORTB ^ (1<<LED_GREEN);
+  ac:	95 b1       	in	r25, 0x05	; 5
+  ae:	98 27       	eor	r25, r24
+  b0:	95 b9       	out	0x05, r25	; 5
+  b2:	9f ef       	ldi	r25, 0xFF	; 255
+  b4:	25 ea       	ldi	r18, 0xA5	; 165
+  b6:	3e e0       	ldi	r19, 0x0E	; 14
+  b8:	91 50       	subi	r25, 0x01	; 1
+  ba:	20 40       	sbci	r18, 0x00	; 0
+  bc:	30 40       	sbci	r19, 0x00	; 0
+  be:	e1 f7       	brne	.-8      	; 0xb8 <Make_D_Morse+0x38>
+  c0:	00 c0       	rjmp	.+0      	; 0xc2 <Make_D_Morse+0x42>
+  c2:	00 00       	nop
+    
+    _delay_ms(DOT_DELAY);
+
+    PORTB = PORTB ^ (1<<LED_GREEN);
+  c4:	95 b1       	in	r25, 0x05	; 5
+  c6:	89 27       	eor	r24, r25
+  c8:	85 b9       	out	0x05, r24	; 5
+  ca:	08 95       	ret
+
+000000cc <Make_E_Morse>:
+  cc:	2f ef       	ldi	r18, 0xFF	; 255
+  ce:	85 ea       	ldi	r24, 0xA5	; 165
+  d0:	9e e0       	ldi	r25, 0x0E	; 14
+  d2:	21 50       	subi	r18, 0x01	; 1
+  d4:	80 40       	sbci	r24, 0x00	; 0
+  d6:	90 40       	sbci	r25, 0x00	; 0
+  d8:	e1 f7       	brne	.-8      	; 0xd2 <Make_E_Morse+0x6>
+  da:	00 c0       	rjmp	.+0      	; 0xdc <Make_E_Morse+0x10>
+  dc:	00 00       	nop
+
+void Make_E_Morse()
+{
+    _delay_ms(DOT_DELAY);
+
+    PORTB = PORTB ^ (1<<LED_GREEN);
+  de:	95 b1       	in	r25, 0x05	; 5
+  e0:	80 e2       	ldi	r24, 0x20	; 32
+  e2:	89 27       	eor	r24, r25
+  e4:	85 b9       	out	0x05, r24	; 5
+  e6:	08 95       	ret
+
+000000e8 <Make_2_Morse>:
+  e8:	2f ef       	ldi	r18, 0xFF	; 255
+  ea:	35 ea       	ldi	r19, 0xA5	; 165
+  ec:	8e e0       	ldi	r24, 0x0E	; 14
+  ee:	21 50       	subi	r18, 0x01	; 1
+  f0:	30 40       	sbci	r19, 0x00	; 0
+  f2:	80 40       	sbci	r24, 0x00	; 0
+  f4:	e1 f7       	brne	.-8      	; 0xee <Make_2_Morse+0x6>
+  f6:	00 c0       	rjmp	.+0      	; 0xf8 <Make_2_Morse+0x10>
+  f8:	00 00       	nop
+
+void Make_2_Morse()
+{
+    _delay_ms(DOT_DELAY);
+
+    PORTB = PORTB ^ (1<<LED_GREEN);
+  fa:	95 b1       	in	r25, 0x05	; 5
+  fc:	80 e2       	ldi	r24, 0x20	; 32
+  fe:	98 27       	eor	r25, r24
+ 100:	95 b9       	out	0x05, r25	; 5
+ 102:	9f ef       	ldi	r25, 0xFF	; 255
+ 104:	25 ea       	ldi	r18, 0xA5	; 165
+ 106:	3e e0       	ldi	r19, 0x0E	; 14
+ 108:	91 50       	subi	r25, 0x01	; 1
+ 10a:	20 40       	sbci	r18, 0x00	; 0
+ 10c:	30 40       	sbci	r19, 0x00	; 0
+ 10e:	e1 f7       	brne	.-8      	; 0x108 <Make_2_Morse+0x20>
+ 110:	00 c0       	rjmp	.+0      	; 0x112 <Make_2_Morse+0x2a>
+ 112:	00 00       	nop
+    
+    _delay_ms(DOT_DELAY);
+
+    PORTB = PORTB ^ (1<<LED_GREEN);
+ 114:	95 b1       	in	r25, 0x05	; 5
+ 116:	98 27       	eor	r25, r24
+ 118:	95 b9       	out	0x05, r25	; 5
+ 11a:	9f ef       	ldi	r25, 0xFF	; 255
+ 11c:	21 ee       	ldi	r18, 0xE1	; 225
+ 11e:	34 e0       	ldi	r19, 0x04	; 4
+ 120:	91 50       	subi	r25, 0x01	; 1
+ 122:	20 40       	sbci	r18, 0x00	; 0
+ 124:	30 40       	sbci	r19, 0x00	; 0
+ 126:	e1 f7       	brne	.-8      	; 0x120 <Make_2_Morse+0x38>
+ 128:	00 c0       	rjmp	.+0      	; 0x12a <Make_2_Morse+0x42>
+ 12a:	00 00       	nop
+    
+    _delay_ms(COMMA_DELAY);
+
+    PORTB = PORTB ^ (1<<LED_GREEN);
+ 12c:	95 b1       	in	r25, 0x05	; 5
+ 12e:	98 27       	eor	r25, r24
+ 130:	95 b9       	out	0x05, r25	; 5
+ 132:	9f ef       	ldi	r25, 0xFF	; 255
+ 134:	21 ee       	ldi	r18, 0xE1	; 225
+ 136:	34 e0       	ldi	r19, 0x04	; 4
+ 138:	91 50       	subi	r25, 0x01	; 1
+ 13a:	20 40       	sbci	r18, 0x00	; 0
+ 13c:	30 40       	sbci	r19, 0x00	; 0
+ 13e:	e1 f7       	brne	.-8      	; 0x138 <Make_2_Morse+0x50>
+ 140:	00 c0       	rjmp	.+0      	; 0x142 <Make_2_Morse+0x5a>
+ 142:	00 00       	nop
+    
+    _delay_ms(COMMA_DELAY);
+
+    PORTB = PORTB ^ (1<<LED_GREEN);
+ 144:	95 b1       	in	r25, 0x05	; 5
+ 146:	98 27       	eor	r25, r24
+ 148:	95 b9       	out	0x05, r25	; 5
+ 14a:	9f ef       	ldi	r25, 0xFF	; 255
+ 14c:	21 ee       	ldi	r18, 0xE1	; 225
+ 14e:	34 e0       	ldi	r19, 0x04	; 4
+ 150:	91 50       	subi	r25, 0x01	; 1
+ 152:	20 40       	sbci	r18, 0x00	; 0
+ 154:	30 40       	sbci	r19, 0x00	; 0
+ 156:	e1 f7       	brne	.-8      	; 0x150 <Make_2_Morse+0x68>
+ 158:	00 c0       	rjmp	.+0      	; 0x15a <Make_2_Morse+0x72>
+ 15a:	00 00       	nop
+    
+    _delay_ms(COMMA_DELAY);
+
+    PORTB = PORTB ^ (1<<LED_GREEN);
+ 15c:	95 b1       	in	r25, 0x05	; 5
+ 15e:	89 27       	eor	r24, r25
+ 160:	85 b9       	out	0x05, r24	; 5
+ 162:	08 95       	ret
+
+00000164 <main>:
+ **********************************************************************/
+int main(void)
+{
+    // Set pin as output in Data Direction Register
+    // DDRB = DDRB or 0010 0000
+    DDRB = DDRB | (1<<LED_GREEN);
+ 164:	25 9a       	sbi	0x04, 5	; 4
+
+    // Set pin LOW in Data Register (LED off)
+    // PORTB = PORTB and 1101 1111
+    PORTB = PORTB & ~(1<<LED_GREEN); 
+ 166:	2d 98       	cbi	0x05, 5	; 5
+    
+    // Infinite loop
+    while (1)
+    {
+        Make_D_Morse();
+ 168:	0e 94 40 00 	call	0x80	; 0x80 <Make_D_Morse>
+        
+        Make_E_Morse();
+ 16c:	0e 94 66 00 	call	0xcc	; 0xcc <Make_E_Morse>
+        
+        Make_2_Morse();
+ 170:	0e 94 74 00 	call	0xe8	; 0xe8 <Make_2_Morse>
+ 174:	f9 cf       	rjmp	.-14     	; 0x168 <main+0x4>
+
+00000176 <_exit>:
+ 176:	f8 94       	cli
+
+00000178 <__stop_program>:
+ 178:	ff cf       	rjmp	.-2      	; 0x178 <__stop_program>
