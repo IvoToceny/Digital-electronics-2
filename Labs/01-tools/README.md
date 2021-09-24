@@ -8,12 +8,12 @@ Link to your `Digital-electronics-2` GitHub repository:
 ### Blink example
 
 1. What is the meaning of the following binary operators in C?
-   * `|`
-   * `&`
-   * `^`
-   * `~`
-   * `<<`
-   * `>>`
+   * `|`  - Bit Or
+   * `&`  - Bit And
+   * `^`  - Bit Xor
+   * `~`  - Bit Nor
+   * `<<` - Bit Left Shift
+   * `>>` - Bit Right Shift
 
 2. Complete truth table with operators: `|`, `&`, `^`, `~`
 
@@ -33,6 +33,7 @@ Link to your `Digital-electronics-2` GitHub repository:
 #define LED_GREEN   PB5 // AVR pin where green LED is connected
 #define DOT_DELAY 100 // Delay in milliseconds
 #define COMMA_DELAY 300 // Delay in milliseconds
+#define PAUSE_DELAY 150  
 #ifndef F_CPU           // Preprocessor directive allows for conditional
                         // compilation. The #ifndef means "if not defined".
 # define F_CPU 16000000 // CPU frequency in Hz required for delay
@@ -65,47 +66,83 @@ int main(void)
 
 void Make_D_Morse()
 {
+    PORTB = PORTB ^ (1<<LED_GREEN); //LED ON
+
+    _delay_ms(COMMA_DELAY);
+
+    PORTB = PORTB ^ (1<<LED_GREEN); // LED OFF
+
+    _delay_ms(PAUSE_DELAY);
+
+    PORTB = PORTB ^ (1<<LED_GREEN); // LED ON
+    
     _delay_ms(DOT_DELAY);
 
-    PORTB = PORTB ^ (1<<LED_GREEN);
+    PORTB = PORTB ^ (1<<LED_GREEN); 
+
+    _delay_ms(PAUSE_DELAY);
+
+    PORTB = PORTB ^ (1<<LED_GREEN); // LED ON
     
     _delay_ms(DOT_DELAY);
 
     PORTB = PORTB ^ (1<<LED_GREEN);
-    
-    _delay_ms(DOT_DELAY);
 
-    PORTB = PORTB ^ (1<<LED_GREEN);
+    _delay_ms(PAUSE_DELAY);
 } 
 
 void Make_E_Morse()
 {
+    PORTB = PORTB ^ (1<<LED_GREEN); // LED ON
+    
     _delay_ms(DOT_DELAY);
 
     PORTB = PORTB ^ (1<<LED_GREEN);
+
+    _delay_ms(PAUSE_DELAY);
 }
 
 void Make_2_Morse()
 {
-    _delay_ms(DOT_DELAY);
-
-    PORTB = PORTB ^ (1<<LED_GREEN);
+    PORTB = PORTB ^ (1<<LED_GREEN); // LED ON
     
     _delay_ms(DOT_DELAY);
 
     PORTB = PORTB ^ (1<<LED_GREEN);
+
+    _delay_ms(PAUSE_DELAY);
+
+    PORTB = PORTB ^ (1<<LED_GREEN); // LED ON
     
+    _delay_ms(DOT_DELAY);
+
+    PORTB = PORTB ^ (1<<LED_GREEN);
+
+    _delay_ms(PAUSE_DELAY);
+
+    PORTB = PORTB ^ (1<<LED_GREEN); //LED ON
+
+    _delay_ms(COMMA_DELAY);
+
+    PORTB = PORTB ^ (1<<LED_GREEN); 
+
+    _delay_ms(PAUSE_DELAY);
+
+    PORTB = PORTB ^ (1<<LED_GREEN); //LED ON
+
     _delay_ms(COMMA_DELAY);
 
     PORTB = PORTB ^ (1<<LED_GREEN);
-    
+
+    _delay_ms(PAUSE_DELAY);
+
+    PORTB = PORTB ^ (1<<LED_GREEN); //LED ON
+
     _delay_ms(COMMA_DELAY);
 
     PORTB = PORTB ^ (1<<LED_GREEN);
-    
-    _delay_ms(COMMA_DELAY);
 
-    PORTB = PORTB ^ (1<<LED_GREEN);
+    _delay_ms(PAUSE_DELAY);
 }
 ```
 
