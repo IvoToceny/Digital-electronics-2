@@ -19,93 +19,118 @@
  * several arguments. Do NOT put a semicolon character at the end of 
  * directives. This is a common mistake.
  */
+
 #define LED_GREEN   PB5 // AVR pin where green LED is connected
-#define DOT_DELAY 300 // Delay in milliseconds
-#define COMMA_DELAY 100 // Delay in milliseconds
+#define DOT_DELAY 100 // Delay in milliseconds
+#define COMMA_DELAY 300 // Delay in milliseconds
+#define PAUSE_DELAY 150
 #ifndef F_CPU           // Preprocessor directive allows for conditional
-                        // compilation. The #ifndef means "if not defined".
+// compilation. The #ifndef means "if not defined".
 # define F_CPU 16000000 // CPU frequency in Hz required for delay
 #endif                  // The #ifndef directive must be closed by #endif
 
-/* Includes ----------------------------------------------------------*/
-/* Include another C language file into the current file at the location
- * of the #include statement prior to compiling the source code.
- */
-#include <util/delay.h> // Functions for busy-wait delay loops
-#include <avr/io.h>     // AVR device-specific IO definitions
-
-/* Function definitions ----------------------------------------------*/
-/**********************************************************************
- * Function: Main function where the program execution begins
- * Purpose:  Toggle one LED and use delay library.
- * Returns:  none
- **********************************************************************/
 int main(void)
 {
-    // Set pin as output in Data Direction Register
-    // DDRB = DDRB or 0010 0000
-    DDRB = DDRB | (1<<LED_GREEN);
+	// Set pin as output in Data Direction Register
+	// DDRB = DDRB or 0010 0000
+	DDRB = DDRB | (1<<LED_GREEN);
 
-    // Set pin LOW in Data Register (LED off)
-    // PORTB = PORTB and 1101 1111
-    PORTB = PORTB & ~(1<<LED_GREEN); 
-    
-    // Infinite loop
-    while (1)
-    {
-        Make_D_Morse();
-        
-        Make_E_Morse();
-        
-        Make_2_Morse();
-    }
-    
-    
-    // Will never reach this
-    return 0;
+	// Set pin LOW in Data Register (LED off)
+	// PORTB = PORTB and 1101 1111
+	PORTB = PORTB & ~(1<<LED_GREEN);
+	
+	// Infinite loop
+	while (1)
+	{
+		Make_D_Morse();
+		
+		Make_E_Morse();
+		
+		Make_2_Morse();
+	}
+	
+	
+	// Will never reach this
+	return 0;
 }
 
 void Make_D_Morse()
 {
-    _delay_ms(DOT_DELAY);
+	PORTB = PORTB ^ (1<<LED_GREEN); //LED ON
 
-    PORTB = PORTB ^ (1<<LED_GREEN);
-    
-    _delay_ms(DOT_DELAY);
+	_delay_ms(COMMA_DELAY);
 
-    PORTB = PORTB ^ (1<<LED_GREEN);
-    
-    _delay_ms(DOT_DELAY);
+	PORTB = PORTB ^ (1<<LED_GREEN); // LED OFF
 
-    PORTB = PORTB ^ (1<<LED_GREEN);
-} 
+	_delay_ms(PAUSE_DELAY);
+
+	PORTB = PORTB ^ (1<<LED_GREEN); // LED ON
+	
+	_delay_ms(DOT_DELAY);
+
+	PORTB = PORTB ^ (1<<LED_GREEN);
+
+	_delay_ms(PAUSE_DELAY);
+
+	PORTB = PORTB ^ (1<<LED_GREEN); // LED ON
+	
+	_delay_ms(DOT_DELAY);
+
+	PORTB = PORTB ^ (1<<LED_GREEN);
+
+	_delay_ms(PAUSE_DELAY);
+}
 
 void Make_E_Morse()
 {
-    _delay_ms(DOT_DELAY);
+	PORTB = PORTB ^ (1<<LED_GREEN); // LED ON
+	
+	_delay_ms(DOT_DELAY);
 
-    PORTB = PORTB ^ (1<<LED_GREEN);
+	PORTB = PORTB ^ (1<<LED_GREEN);
+
+	_delay_ms(PAUSE_DELAY);
 }
 
 void Make_2_Morse()
 {
-    _delay_ms(DOT_DELAY);
+	PORTB = PORTB ^ (1<<LED_GREEN); // LED ON
+	
+	_delay_ms(DOT_DELAY);
 
-    PORTB = PORTB ^ (1<<LED_GREEN);
-    
-    _delay_ms(DOT_DELAY);
+	PORTB = PORTB ^ (1<<LED_GREEN);
 
-    PORTB = PORTB ^ (1<<LED_GREEN);
-    
-    _delay_ms(COMMA_DELAY);
+	_delay_ms(PAUSE_DELAY);
 
-    PORTB = PORTB ^ (1<<LED_GREEN);
-    
-    _delay_ms(COMMA_DELAY);
+	PORTB = PORTB ^ (1<<LED_GREEN); // LED ON
+	
+	_delay_ms(DOT_DELAY);
 
-    PORTB = PORTB ^ (1<<LED_GREEN);
-    
-    _delay_ms(COMMA_DELAY);
+	PORTB = PORTB ^ (1<<LED_GREEN);
 
-    PORTB = PORTB ^ (1<<LED_GREEN);
+	_delay_ms(PAUSE_DELAY);
+
+	PORTB = PORTB ^ (1<<LED_GREEN); //LED ON
+
+	_delay_ms(COMMA_DELAY);
+
+	PORTB = PORTB ^ (1<<LED_GREEN);
+
+	_delay_ms(PAUSE_DELAY);
+
+	PORTB = PORTB ^ (1<<LED_GREEN); //LED ON
+
+	_delay_ms(COMMA_DELAY);
+
+	PORTB = PORTB ^ (1<<LED_GREEN);
+
+	_delay_ms(PAUSE_DELAY);
+
+	PORTB = PORTB ^ (1<<LED_GREEN); //LED ON
+
+	_delay_ms(COMMA_DELAY);
+
+	PORTB = PORTB ^ (1<<LED_GREEN);
+
+	_delay_ms(PAUSE_DELAY);
 }
