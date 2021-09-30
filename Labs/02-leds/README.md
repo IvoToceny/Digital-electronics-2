@@ -41,7 +41,7 @@ int main(void)
 
     // Configure the second LED at port C
     DDRC = DDRC | (1<<LED_RED);
-    PORTC = PORTC & (1<<LED_RED);
+    PORTC = PORTC | (1<<LED_RED);
 
     // Infinite loop
     while (1)
@@ -89,4 +89,122 @@ int main(void)
 
 1. Scheme of Knight Rider application, i.e. connection of AVR device, five LEDs, resistors, one push button, and supply voltage. The image can be drawn on a computer or by hand. Always name all components and their values!
 
-   ![your figure]()
+   ![KnightRiderScheme](images/KnightRiderScheme.png)
+
+## Functioning code of Knight Rider
+
+```c
+#define LED_0   PC4
+#define LED_1   PC3 
+#define LED_2   PC2 
+#define LED_3   PB5 
+#define LED_4   PB4 
+#define BUTTON    PD0
+#define BLINK_DELAY 200
+
+int main(void)
+{
+    // Green LED at port B
+    // Set pin as output in Data Direction Register...
+    DDRC = DDRC | (1<<LED_0);
+    PORTC = PORTC & ~(1<<LED_0);
+
+    DDRC = DDRC | (1<<LED_1);
+    PORTC = PORTC  & ~(1<<LED_1);
+	
+    DDRC = DDRC | (1<<LED_2);
+    PORTC = PORTC & ~(1<<LED_2);
+	
+    DDRB = DDRB | (1<<LED_3);
+    PORTB = PORTB & ~(1<<LED_3);
+	
+    DDRB = DDRB | (1<<LED_4);
+    PORTB = PORTB & ~(1<<LED_4);
+    
+    // Configure Push button at port D and enable internal pull-up resistor
+    DDRD = DDRD & ~(1<<BUTTON);
+    PORTD = PORTD | (1<<BUTTON);
+    
+    int counter = 0;
+    bool appSwitch = false;
+    bool isAddingDirection = false;
+	
+    // Infinite loop
+    while (1)
+    {      	
+        if(bit_is_clear(PIND, BUTTON))    
+        {
+		appSwitch = !appSwitch;
+		loop_until_bit_is_set(PIND, BUTTON);
+
+		if(counter > 2)
+		{
+			PORTB = PORTB ^ (1<<counter);
+		}
+		else
+		{
+			PORTC = PORTC ^ (1<<counter);
+		}
+        }
+		
+	if(appSwitch)
+	{		
+		switch (counter)
+		{
+			case 0:
+				PORTB = PORTB ^ (1<<LED_1);
+				PORTC = PORTC ^ (1<<LED_0);
+				isAddingDirection = true;
+				break;
+			case 1:
+				if(isAddingDirection)
+				{
+					PORTC = PORTC ^ (1<<LED_0);
+					PORTC = PORTC ^ (1<<LED_1);
+				}
+				else
+				{
+					PORTC = PORTC ^ (1<<LED_2);
+					PORTC = PORTC ^ (1<<LED_1);
+				}
+				break;
+			case 2:
+				if(isAddingDirection)
+				{
+					PORTC = PORTC ^ (1<<LED_1);
+					PORTC = PORTC ^ (1<<LED_2);
+				}
+				else
+				{
+					PORTB = PORTB ^ (1<<LED_3);
+					PORTC = PORTC ^ (1<<LED_2);
+				}
+				break;
+			case 3:
+				if(isAddingDirection)
+				{
+					PORTC = PORTC ^ (1<<LED_2);
+					PORTB = PORTB ^ (1<<LED_3);
+				}
+				else
+				{
+					PORTB = PORTB ^ (1<<LED_4);
+					PORTB = PORTB ^ (1<<LED_3);
+				}
+				break;
+			case 4:
+				PORTB = PORTB ^ (1<<LED_3);
+				PORTB = PORTB ^ (1<<LED_4);
+				isAddingDirection = false;
+				break;
+		}
+						
+		isAddingDirection ? counter++ : counter--;
+		_delay_ms(BLINK_DELAY);
+	}
+    }
+
+    // Will never reach this
+    return 0;
+}
+```
