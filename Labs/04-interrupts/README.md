@@ -2,7 +2,7 @@
 
 Link to your `Digital-electronics-2` GitHub repository:
 
-   [https://github.com/...](https://github.com/...)
+   [https://github.com/Ivo-Toceny-222683/Digital-electronics-2/tree/main/Labs/04-interrupts](https://github.com/Ivo-Toceny-222683/Digital-electronics-2/tree/main/Labs/04-interrupts)
 
 
 ### Overflow times
@@ -11,16 +11,16 @@ Link to your `Digital-electronics-2` GitHub repository:
 
 | **Module** | **Number of bits** | **1** | **8** | **32** | **64** | **128** | **256** | **1024** |
 | :-: | :-: | :-: | :-: | :-: | :-: | :-: | :-: | :-: |
-| Timer/Counter0 | 8  | 16u | 128u | -- | | -- | | |
-| Timer/Counter1 | 16 |     |      | -- | | -- | | |
-| Timer/Counter2 | 8  |     |      |    | |    | | |
+| Timer/Counter0 | 8  | 16u | 128u | -- | 1m | -- | 4m | 16m |
+| Timer/Counter1 | 16 | 4m | 32m | -- | 0,262 | -- | 1,049 | 4,194 |
+| Timer/Counter2 | 8  | 16u | 128u | 0,512m | 1m | 2m | 4m | 16m |
 
 
 ### Timer library
 
 1. In your words, describe the difference between common C function and interrupt service routine.
-   * Function
-   * Interrupt service routine
+   * Function - Može byť volaná v niekedy v priebehu funkcie main(), vykoná sa jedine ak je zavolaná mainom, nemá žiadnu prioritu narozdiel od iterruptu
+   * Interrupt service routine - Nie je špecificky volaná v maine, nastane pri vyvolaní interruptu, či už hardwarovo(tlačítko) alebo softwarovo(naprogramovaný, povedzme pri pretečení čítaču), ak nastane, automaticky sa preruší akákoľvek iná funkcia sa vykonáva a vykoná sa vnútro tohto ISR, následne sa vráti program spatne do mainu.
 
 2. Part of the header file listing with syntax highlighting, which defines settings for Timer/Counter0:
 
@@ -75,6 +75,8 @@ ISR(TIMER1_OVF_vect)
     GPIO_toggle(&PORTB, LED_D1);
 }
 ```
+
+![Flowchart figure](images/diagram.png)
 
 
 ### Knight Rider
