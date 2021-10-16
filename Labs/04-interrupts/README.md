@@ -1,4 +1,4 @@
-# Lab 4: YOUR_FIRSTNAME FAMILYNAME
+# Lab 4: Ivo Točený
 
 Link to your `Digital-electronics-2` GitHub repository:
 
