@@ -150,7 +150,20 @@ void SEG_update_shift_regs(uint8_t segments, uint8_t position)
 /**********************************************************************
  * Function: SEG_clear()
  **********************************************************************/
-
+void SEG_clear(void)
+{
+	SEG_update_shift_regs(257, 0);
+	SEG_update_shift_regs(257, 1);
+	SEG_update_shift_regs(257, 2);
+	SEG_update_shift_regs(257, 3);
+}
 /**********************************************************************
  * Function: SEG_clk_2us()
  **********************************************************************/
+void SEG_clk_2us(void)
+{
+	GPIO_write_high(&PORTD, SEG_CLK);
+	_delay_us(1);
+	GPIO_write_low(&PORTD, SEG_CLK);
+	_delay_us(1);
+}

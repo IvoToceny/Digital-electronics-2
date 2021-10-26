@@ -24,30 +24,34 @@
  *           display) when 16-bit Timer/Counter1 overflows.
  * Returns:  none
  **********************************************************************/
+uint8_t counter = 0;
+
 int main(void)
 {
     // Configure SSD signals
     SEG_init();
+	SEG_clear();
 
     // Test of SSD: display number '3' at position 0
-    SEG_update_shift_regs(0, 0);
+    //SEG_update_shift_regs(0, 0);
 
     // Configure 16-bit Timer/Counter1 for Decimal counter
+	TIM1_overflow_262ms();
+	TIM0_overflow_128us();
+	
     // Set the overflow prescaler to 262 ms and enable interrupt
-    TIM1_overflow_262ms();
     TIM1_overflow_interrupt_enable();
+    TIM0_overflow_interrupt_enable();
+	
 
     // Enables interrupts by setting the global interrupt mask
     sei();
-    
-    int counter = 0;
 
     // Infinite loop
     while (1)
     {
-        /* Empty loop. All subsequent operations are performed exclusively 
-         * inside interrupt service routines ISRs */
-        _delay_ms(3000);
+		/*
+        _delay_ms(6000);
         SEG_update_shift_regs(counter, 0);
         counter++;
         
@@ -55,6 +59,7 @@ int main(void)
         {
             counter = 0;
         }
+		*/
     }
 
     // Will never reach this
@@ -68,28 +73,33 @@ int main(void)
  **********************************************************************/
 ISR(TIMER1_OVF_vect)
 {
-    // WRITE YOUR CODE HERE
-    counter++;
-    
-    dis0 = counter / 10;
-    dis1 = counter % 10;
+    if(counter < 60)
+	{
+		counter++;
+	}
+	else
+	{
+		counter = 0;
+	}
 }
 
 ISR(TIMER0_OVF_vect)
 {
-    // WRITE YOUR CODE HERE
-    static uint8_t pos = 0; 
-    static uint8_t dis1 = 0;
-    static uint8_t dis0 = 0;
+    static uint8_t pos = 0;  // This line will only run the first time
+	static uint8_t currentVal;
+    static int pow10[5] = { 1, 10, 100, 1000, 10000 };
     
-    if(pos == 0)
-    {
-        SEG_update_shift_regs(dis0, 0);
-        pos++;
-    }
-    else
-    {
-        SEG_update_shift_regs(dis1, 1);
-        pos = 0;
-    }
+    // calculate digit from number and pos
+    currentVal = (counter % pow10[pos+1]) / (pow10[pos]);
+    
+    // Update segment
+    SEG_update_shift_regs(currentVal, pos);
+    
+    // Increment to go to next segment
+    pos++;
+	
+    if (pos == 4)
+	{
+		 pos = 0;
+	}
 }
