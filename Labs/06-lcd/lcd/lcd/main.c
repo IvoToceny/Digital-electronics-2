@@ -76,21 +76,6 @@ int main(void)
     // Infinite loop
     while (1)
     {		
-		// Initialize LCD display
-		lcd_init(LCD_DISP_ON);
-
-		// Set pointer to beginning of CGRAM memory
-		lcd_command(1 << LCD_CGRAM);
-		for (uint8_t i = 0; i < 8; i++)
-		{
-			// Store all new chars to memory line by line
-			lcd_data(customChar[i]);
-		}
-		// Set DDRAM address
-		lcd_command(1 << LCD_DDRAM);
-		
-		// Display first custom character
-		lcd_putc(0);
         /* Empty loop. All subsequent operations are performed exclusively 
          * inside interrupt service routines ISRs */
     }
@@ -129,8 +114,18 @@ ISR(TIMER2_OVF_vect)
 		{
 			secs = 0;
 		}
+		
 		lcd_gotoxy(4,0);
-		itoa(secs, lcd_string, 10);
+		
+		if(secs < 10)
+		{
+			itoa('0' + secs, lcd_string, 10);
+		}
+		else
+		{
+			itoa(secs, lcd_string, 10);
+		}	
+		
 		lcd_puts(lcd_string);
 		lcd_gotoxy(7,0);
 		lcd_putc(tens + '0');
