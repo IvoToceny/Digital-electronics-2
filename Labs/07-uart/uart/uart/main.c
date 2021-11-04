@@ -111,9 +111,6 @@ ISR(ADC_vect)
     lcd_gotoxy(8, 0);
     lcd_puts(lcd_string);
     
-    uart_puts("                     ");
-    uart_putc('\r');
-    uart_puts("ADC Value: ");
     uart_puts(lcd_string);
     //uart_putc('\n');
     uart_putc('\r');
