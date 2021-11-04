@@ -7,12 +7,12 @@ Analog-to-Digital Conversion
 
     Complete table with voltage divider, calculated, and measured ADC values for all five push buttons.
     Push button 	PC0[A0] voltage 	ADC value (calculated) 	ADC value (measured)
-    Right 	0 V 	0 	
-    Up 	0.495 V 	101 	
-    Down 			
-    Left 			
-    Select 			
-    none 			
+    Right 	0 V 	0 	                                        0
+    Up 	0.495 V 	101                                             99	
+    Down 1.202 V                                                        257                                                                			
+    Left 1.969 V                                                        410			
+    Select 3.181 V                                                      640      			
+    none 5 V                                                            1023			
 
     Code listing of ACD interrupt service routine for sending data to the LCD/UART and identification of the pressed button. Always use syntax highlighting and meaningful comments:
 
