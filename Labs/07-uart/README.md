@@ -12,10 +12,10 @@ Link to this file in your GitHub repository:
    | :-: | :-: | :-: | :-: |
    | Right  | 0&nbsp;V | 0   | 0 |
    | Up     | 0.495&nbsp;V | 101 | 99 |
-   | Down   | 1.202&nbsp;V |     | 257 |
-   | Left   | 1.969&nbsp;V |     | 410|
-   | Select | 3.181&nbsp;V |     | 640 |
-   | none   | 5&nbsp;V |     | 1023 |
+   | Down   | 1.202&nbsp;V | 246 | 257 |
+   | Left   | 1.969&nbsp;V | 403 | 410|
+   | Select | 3.181&nbsp;V | 651 | 640 |
+   | none   | 5&nbsp;V | 1023 | 1023 |
 
 2. Code listing of ACD interrupt service routine for sending data to the LCD/UART and identification of the pressed button. Always use syntax highlighting and meaningful comments:
 
@@ -54,7 +54,7 @@ ISR(ADC_vect)
 
 1. (Hand-drawn) picture of UART signal when transmitting three character data `De2` in 4800 7O2 mode (7 data bits, odd parity, 2 stop bits, 4800&nbsp;Bd).
 
-   ![your figure]()
+   ![UART_De2](images/uart_De2.png)
 
 2. Flowchart figure for function `uint8_t get_parity(uint8_t data, uint8_t type)` which calculates a parity bit of input 8-bit `data` according to parameter `type`. The image can be drawn on a computer or by hand. Use clear descriptions of the individual steps of the algorithms.
 
