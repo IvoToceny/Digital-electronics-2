@@ -42,7 +42,7 @@ ISR(TIMER1_OVF_vect)
         // If slave address is between 8 and 119 then move to SEND state
 	if(addr >= 8 && addr <= 119)
 	{
-	      state = STATE_SEND;
+	    state = STATE_SEND;
 	}
         break;
     
@@ -61,11 +61,11 @@ ISR(TIMER1_OVF_vect)
          * state, otherwise move to IDLE */
 	if(!value)
 	{
-	      state = STATE_ACK;
+	    state = STATE_ACK;
 	}
 	else
 	{
-	      state = STATE_IDLE;
+	    state = STATE_IDLE;
 	}
         break;
 
